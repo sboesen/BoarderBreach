@@ -7,7 +7,7 @@ p HTTParty
 
 dont_want ='{"error":true,"url":""}' 
 
-pool = Thread.pool(2)
+pool = Thread.pool(200)
 
 try = (0..1000000).to_a
 try.shuffle.each_with_index do |i, index|
@@ -19,7 +19,7 @@ try.shuffle.each_with_index do |i, index|
     puts response.body + " for i == #{i} ( #{index} / 1,000,000 )"
   end
   if i % 20 == 0
-    sleep 3
+    sleep 0.1
   end
 end
 
